@@ -1,0 +1,112 @@
+<!-- Needer Request Form (Create/Edit) Page -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Request Form - Smart Aid and Relief Alliance</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                <div class="card-header bg-danger text-white" style="border-radius: 15px 15px 0 0;">
+                    <h3 class="mb-0">
+                        <i class="bi bi-hand-thumbs-up me-2"></i>
+                        <span th:text="${request.id != null} ? 'Edit Request' : 'Request Help'"></span>
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/needer/requests}" th:object="${request}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-bold">
+                                <i class="bi bi-chat-left-text me-2 text-danger"></i>Title
+                            </label>
+                            <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="What do you need?" required>
+                            <div class="text-danger small" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label fw-bold">
+                                <i class="bi bi-file-text me-2 text-danger"></i>Description
+                            </label>
+                            <textarea class="form-control" id="description" th:field="*{description}" rows="4" placeholder="Describe your needs in detail..." required></textarea>
+                            <div class="text-danger small" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="resourceType" class="form-label fw-bold">
+                                    <i class="bi bi-box-seam me-2 text-danger"></i>Resource Type
+                                </label>
+                                <select class="form-control" id="resourceType" th:field="*{resourceType}" required>
+                                    <option value="">Select Type...</option>
+                                    <option th:each="type : ${resourceTypes}" th:value="${type}" th:text="${type}"></option>
+                                </select>
+                                <div class="text-danger small" th:if="${#fields.hasErrors('resourceType')}" th:errors="*{resourceType}">Error</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="quantityNeeded" class="form-label fw-bold">
+                                    <i class="bi bi-hash me-2 text-danger"></i>Quantity Needed
+                                </label>
+                                <input type="number" class="form-control" id="quantityNeeded" th:field="*{quantityNeeded}" min="1" required>
+                                <div class="text-danger small" th:if="${#fields.hasErrors('quantityNeeded')}" th:errors="*{quantityNeeded}">Error</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="location" class="form-label fw-bold">
+                                <i class="bi bi-geo-alt me-2 text-danger"></i>Location
+                            </label>
+                            <input type="text" class="form-control" id="location" th:field="*{location}" placeholder="Your location or address..." required>
+                            <div class="text-danger small" th:if="${#fields.hasErrors('location')}" th:errors="*{location}">Error</div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="urgency" class="form-label fw-bold">
+                                    <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Urgency Level
+                                </label>
+                                <select class="form-control" id="urgency" th:field="*{urgency}" required>
+                                    <option value="">Select Level...</option>
+                                    <option th:each="level : ${urgencyLevels}" th:value="${level}" th:text="${level}"></option>
+                                </select>
+                                <div class="text-danger small" th:if="${#fields.hasErrors('urgency')}" th:errors="*{urgency}">Error</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="neededBy" class="form-label fw-bold">
+                                    <i class="bi bi-calendar me-2 text-danger"></i>Needed By
+                                </label>
+                                <input type="datetime-local" class="form-control" id="neededBy" th:field="*{neededBy}" required>
+                                <div class="text-danger small" th:if="${#fields.hasErrors('neededBy')}" th:errors="*{neededBy}">Error</div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg" style="border-radius: 10px;">
+                                <i class="bi bi-check-circle me-2"></i>
+                                <span th:text="${request.id != null} ? 'Save Changes' : 'Submit Request'"></span>
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-2">
+                            <a th:href="@{/needer/requests}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

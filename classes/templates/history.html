@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delivery History - SARA</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+<div class="container py-4">
+    <h2 class="mb-3">History of Delivered Things by Place</h2>
+
+    <form method="get" th:action="@{/history}" class="row g-2 mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="location" th:value="${selectedLocation}" placeholder="Filter by place/location">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+        <div class="col-md-2">
+            <a th:href="@{/history}" class="btn btn-outline-secondary w-100">Clear</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead>
+            <tr>
+                <th>Place</th>
+                <th>Thing Given</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Delivered At</th>
+                <th>Volunteer</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(deliveredAssignments)}">
+                <td colspan="6" class="text-center text-muted">No delivery history found.</td>
+            </tr>
+            <tr th:each="assignment : ${deliveredAssignments}">
+                <td th:text="${assignment.resource.location}"></td>
+                <td th:text="${assignment.resource.name}"></td>
+                <td th:text="${assignment.resource.type}"></td>
+                <td th:text="${assignment.resource.quantity}"></td>
+                <td th:text="${assignment.deliveredAt != null ? #temporals.format(assignment.deliveredAt, 'yyyy-MM-dd HH:mm') : 'N/A'}"></td>
+                <td th:text="${assignment.volunteer != null ? assignment.volunteer.fullName : 'N/A'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

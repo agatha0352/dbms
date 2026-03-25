@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title>Help Dashboard - SARA</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h3">
+                        <i class="bi bi-person-heart me-2 text-danger"></i>
+                        Help Dashboard
+                    </h1>
+                    <a th:href="@{/needer/requests/new}" class="btn btn-danger">
+                        <i class="bi bi-plus-lg me-1"></i>Request Help
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-danger" th:text="${totalRequests ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Total Requests</h6>
+                        <small class="text-muted">Help requests you've made</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-success" th:text="${fulfilledRequests ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Fulfilled</h6>
+                        <small class="text-muted">Requests that received help</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-info" th:text="${user?.fullName ?: 'User'}">User</div>
+                        <h6 class="card-title text-muted">Welcome</h6>
+                        <small class="text-muted">We're here to help</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- My Requests -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            My Requests
+                        </h5>
+                        <a th:href="@{/needer/requests}" class="btn btn-outline-primary btn-sm">
+                            View All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${userRequests != null and !userRequests.isEmpty()}">
+                            <div th:each="request, iterStat : ${userRequests}" th:if="${iterStat.index < 3}">
+                                <div class="border-start border-danger border-3 ps-3 mb-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="mb-1" th:text="${request.title}">Request Title</h6>
+                                        <span class="badge bg-danger" th:if="${request.urgency == T(com.sara.entity.Request$UrgencyLevel).CRITICAL}" th:text="${request.urgency}">Urgency</span>
+                                        <span class="badge bg-warning" th:if="${request.urgency == T(com.sara.entity.Request$UrgencyLevel).HIGH}" th:text="${request.urgency}">Urgency</span>
+                                        <span class="badge bg-info" th:if="${request.urgency == T(com.sara.entity.Request$UrgencyLevel).MEDIUM}" th:text="${request.urgency}">Urgency</span>
+                                        <span class="badge bg-secondary" th:if="${request.urgency == T(com.sara.entity.Request$UrgencyLevel).LOW}" th:text="${request.urgency}">Urgency</span>
+                                    </div>
+                                    <p class="text-muted small mb-1" th:text="${request.description}">Description</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-geo-alt me-1"></i>
+                                            <span th:text="${request.location}">Location</span>
+                                        </small>
+                                        <span class="badge bg-warning" th:if="${request.status == T(com.sara.entity.Request$RequestStatus).OPEN}" th:text="${request.status}">Status</span>
+                                        <span class="badge bg-success" th:if="${request.status == T(com.sara.entity.Request$RequestStatus).FULFILLED}" th:text="${request.status}">Status</span>
+                                        <span class="badge bg-secondary" th:if="${request.status == T(com.sara.entity.Request$RequestStatus).CANCELLED}" th:text="${request.status}">Status</span>
+                                        <span class="badge bg-info" th:if="${request.status == T(com.sara.entity.Request$RequestStatus).IN_PROGRESS}" th:text="${request.status}">Status</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${userRequests == null or userRequests.isEmpty()}" class="text-center py-3">
+                            <i class="bi bi-clipboard display-4 text-muted mb-3"></i>
+                            <p class="text-muted">No help requests yet</p>
+                            <a th:href="@{/needer/requests/new}" class="btn btn-danger btn-sm">
+                                Request Help
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Resources -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-box-seam me-2"></i>
+                            Available Resources
+                        </h5>
+                        <a th:href="@{/needer/resources}" class="btn btn-outline-success btn-sm">
+                            View All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${availableResources != null and !availableResources.isEmpty()}">
+                            <div th:each="resource, iterStat : ${availableResources}" th:if="${iterStat.index < 3}">
+                                <div class="border-start border-success border-3 ps-3 mb-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h6 class="mb-1" th:text="${resource.name}">Resource Name</h6>
+                                        <span class="badge bg-success" th:if="${resource.verified}">Verified</span>
+                                    </div>
+                                    <p class="text-muted small mb-1" th:text="${resource.description}">Description</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-geo-alt me-1"></i>
+                                            <span th:text="${resource.location}">Location</span>
+                                        </small>
+                                        <small class="text-muted">
+                                            Qty: <strong th:text="${resource.quantity}">0</strong>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${availableResources == null or availableResources.isEmpty()}" class="text-center py-3">
+                            <i class="bi bi-box display-4 text-muted mb-3"></i>
+                            <p class="text-muted">No resources available at the moment</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-lightning me-2"></i>
+                            Quick Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <a th:href="@{/needer/requests/new}" class="btn btn-outline-danger w-100">
+                                    <i class="bi bi-plus-circle d-block mb-2" style="font-size: 2rem;"></i>
+                                    Request Help
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/needer/requests}" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-list-ul d-block mb-2" style="font-size: 2rem;"></i>
+                                    My Requests
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/needer/resources}" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-search d-block mb-2" style="font-size: 2rem;"></i>
+                                    Find Resources
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/contact}" class="btn btn-outline-info w-100">
+                                    <i class="bi bi-telephone d-block mb-2" style="font-size: 2rem;"></i>
+                                    Contact Help
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

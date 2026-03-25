@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Manage Resources - SARA Admin</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+    
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="bi bi-box-seam"></i> Manage Resources</h2>
+                        <a th:href="@{/admin/dashboard}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+
+                    <!-- Success/Error Messages -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle"></i> <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Resources Table -->
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Quantity</th>
+                                            <th>Expiry Date</th>
+                                            <th>Location</th>
+                                            <th>Donor</th>
+                                            <th>Status</th>
+                                            <th>Verified</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:if="${#lists.isEmpty(resources)}">
+                                            <td colspan="9" class="text-center">No resources found</td>
+                                        </tr>
+                                        <tr th:each="resource : ${resources}">
+                                            <td th:text="${resource.name}"></td>
+                                            <td>
+                                                <span class="badge bg-secondary" th:text="${resource.type}"></span>
+                                            </td>
+                                            <td th:text="${resource.quantity}"></td>
+                                            <td th:text="${resource.expiryDate != null ? resource.expiryDate : 'N/A'}"></td>
+                                            <td th:text="${resource.location}"></td>
+                                            <td th:text="${resource.user.fullName}"></td>
+                                            <td>
+                                                <span class="badge bg-success" th:if="${resource.status.name() == 'AVAILABLE'}" th:text="${resource.status}"></span>
+                                                <span class="badge bg-warning" th:if="${resource.status.name() == 'RESERVED'}" th:text="${resource.status}"></span>
+                                                <span class="badge bg-info" th:if="${resource.status.name() == 'DELIVERED'}" th:text="${resource.status}"></span>
+                                                <span class="badge bg-secondary" th:unless="${resource.status.name() == 'AVAILABLE' || resource.status.name() == 'RESERVED' || resource.status.name() == 'DELIVERED'}" th:text="${resource.status}"></span>
+                                            </td>
+                                            <td>
+                                                <span th:if="${resource.verified}" class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> Verified
+                                                </span>
+                                                <span th:unless="${resource.verified}" class="badge bg-warning">
+                                                    <i class="bi bi-clock"></i> Pending
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <!-- Assign Button (only if verified and available/reserved) -->
+                                                    <a th:if="${resource.verified && (resource.status.name() == 'AVAILABLE' || resource.status.name() == 'RESERVED')}" 
+                                                       th:href="@{/admin/resources/{id}/assign(id=${resource.id})}" 
+                                                       class="btn btn-primary btn-sm" 
+                                                       title="Assign to Volunteer">
+                                                        <i class="bi bi-person-check"></i> Assign
+                                                    </a>
+                                                    
+                                                    <!-- View Button -->
+                                                    <a th:href="@{/admin/resources/{id}(id=${resource.id})}" 
+                                                       class="btn btn-info btn-sm" 
+                                                       title="View Details">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

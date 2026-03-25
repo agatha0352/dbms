@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title>Admin Dashboard - SARA</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="h3 mb-4">
+                    <i class="bi bi-gear me-2 text-primary"></i>
+                    Admin Dashboard
+                </h1>
+            </div>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-primary" th:text="${totalUsers ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Total Users</h6>
+                        <small class="text-muted">
+                            <i class="bi bi-people me-1"></i>
+                            All registered users
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-success" th:text="${totalResources ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Total Resources</h6>
+                        <small class="text-muted">
+                            <i class="bi bi-box-seam me-1"></i>
+                            Available: <span th:text="${availableResources ?: 0}">0</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-warning" th:text="${totalRequests ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Total Requests</h6>
+                        <small class="text-muted">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            Open: <span th:text="${openRequests ?: 0}">0</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body text-center">
+                        <div class="dashboard-stat text-info" th:text="${totalAssignments ?: 0}">0</div>
+                        <h6 class="card-title text-muted">Assignments</h6>
+                        <small class="text-muted">
+                            <i class="bi bi-clipboard-check me-1"></i>
+                            Completed: <span th:text="${completedAssignments ?: 0}">0</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Statistics -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary bg-opacity-10 border-primary">
+                    <div class="card-body text-center">
+                        <h4 class="text-primary" th:text="${totalDonors ?: 0}">0</h4>
+                        <small class="text-muted">Donors</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info bg-opacity-10 border-info">
+                    <div class="card-body text-center">
+                        <h4 class="text-info" th:text="${totalVolunteers ?: 0}">0</h4>
+                        <small class="text-muted">Volunteers</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning bg-opacity-10 border-warning">
+                    <div class="card-body text-center">
+                        <h4 class="text-warning" th:text="${totalNeeders ?: 0}">0</h4>
+                        <small class="text-muted">Needers</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success bg-opacity-10 border-success">
+                    <div class="card-body text-center">
+                        <h4 class="text-success" th:text="${verifiedResources ?: 0}">0</h4>
+                        <small class="text-muted">Verified Resources</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Recent Resources -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-box-seam me-2"></i>
+                            Recent Resources
+                        </h5>
+                        <a th:href="@{/admin/resources}" class="btn btn-outline-primary btn-sm">
+                            Manage All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${recentResources != null and !recentResources.isEmpty()}">
+                            <div th:each="resource, iterStat : ${recentResources}">
+                                <div class="d-flex justify-content-between align-items-center py-2" 
+                                     th:classappend="${!iterStat.last} ? 'border-bottom' : ''">
+                                    <div>
+                                        <h6 class="mb-1" th:text="${resource.name}">Resource Name</h6>
+                                        <small class="text-muted" th:text="${resource.user.fullName}">Donor Name</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-success" th:if="${resource.verified}">Verified</span>
+                                        <span class="badge bg-warning" th:unless="${resource.verified}">Pending</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${recentResources == null or recentResources.isEmpty()}" class="text-center py-3">
+                            <p class="text-muted">No recent resources</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Requests -->
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Recent Requests
+                        </h5>
+                        <a th:href="@{/admin/requests}" class="btn btn-outline-warning btn-sm">
+                            Manage All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div th:if="${recentRequests != null and !recentRequests.isEmpty()}">
+                            <div th:each="request, iterStat : ${recentRequests}">
+                                <div class="d-flex justify-content-between align-items-center py-2" 
+                                     th:classappend="${!iterStat.last} ? 'border-bottom' : ''">
+                                    <div>
+                                        <h6 class="mb-1" th:text="${request.title}">Request Title</h6>
+                                        <small class="text-muted" th:text="${request.user.fullName}">User Name</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge" th:classappend="${request.urgencyBadgeClass}" th:text="${request.urgency}">Urgency</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${recentRequests == null or recentRequests.isEmpty()}" class="text-center py-3">
+                            <p class="text-muted">No recent requests</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-lightning me-2"></i>
+                            Admin Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <a th:href="@{/admin/users}" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-people d-block mb-2" style="font-size: 2rem;"></i>
+                                    Manage Users
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/admin/resources}" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-box-seam d-block mb-2" style="font-size: 2rem;"></i>
+                                    Manage Resources
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/admin/requests}" class="btn btn-outline-warning w-100">
+                                    <i class="bi bi-exclamation-triangle d-block mb-2" style="font-size: 2rem;"></i>
+                                    Manage Requests
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a th:href="@{/admin/assignments}" class="btn btn-outline-info w-100">
+                                    <i class="bi bi-clipboard-check d-block mb-2" style="font-size: 2rem;"></i>
+                                    Manage Assignments
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

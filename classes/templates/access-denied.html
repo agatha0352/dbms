@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Access Denied - SARA</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-danger shadow">
+                <div class="card-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-shield-x display-1 text-danger"></i>
+                    </div>
+                    <h1 class="h2 text-danger mb-3">Access Denied</h1>
+                    <p class="lead mb-4">
+                        Sorry, you don't have permission to access this page.
+                    </p>
+                    
+                    <div class="alert alert-warning" role="alert" th:if="${user != null}">
+                        <i class="bi bi-info-circle me-2"></i>
+                        You are logged in as <strong th:text="${user.fullName}"></strong> 
+                        with role: <span class="badge bg-primary" th:text="${user.role}"></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-muted">
+                            This page is restricted to specific user roles. If you believe you should have access, 
+                            please contact the administrator.
+                        </p>
+                    </div>
+                    
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        <a th:href="@{/dashboard}" class="btn btn-primary">
+                            <i class="bi bi-house-door me-2"></i>Go to Dashboard
+                        </a>
+                        <a th:href="@{/home}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <h5 class="mb-3">What you can do:</h5>
+                <div class="row g-3">
+                    <div class="col-md-4" sec:authorize="hasRole('DONOR')">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="bi bi-gift-fill text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Donate Resources</h6>
+                                <a th:href="@{/donor/resources}" class="btn btn-sm btn-success mt-2">Go</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" sec:authorize="hasRole('VOLUNTEER')">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="bi bi-people-fill text-info" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Volunteer</h6>
+                                <a th:href="@{/volunteer/requests}" class="btn btn-sm btn-info mt-2">Go</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" sec:authorize="hasRole('NEEDER')">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="bi bi-hand-thumbs-up-fill text-warning" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Request Help</h6>
+                                <a th:href="@{/needer/requests}" class="btn btn-sm btn-warning mt-2">Go</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <i class="bi bi-gear-fill text-primary" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Admin Panel</h6>
+                                <a th:href="@{/admin/dashboard}" class="btn btn-sm btn-primary mt-2">Go</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

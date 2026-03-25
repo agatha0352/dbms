@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Users - SARA</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-people me-2 text-primary"></i>
+                    Manage Users
+                </h1>
+                <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form th:action="@{/admin/users}" method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Filter by Role</label>
+                    <select name="role" class="form-select">
+                        <option value="">All Roles</option>
+                        <option th:each="userRole : ${userRoles}" 
+                                th:value="${userRole}" 
+                                th:text="${userRole}"
+                                th:selected="${selectedRole != null && selectedRole == userRole}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-filter me-1"></i>Filter
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <a th:href="@{/admin/users}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-x-circle me-1"></i>Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="bi bi-list me-2"></i>
+                Users List
+                <span class="badge bg-primary ms-2" th:text="${users.size()}">0</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Verification</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}">1</td>
+                            <td>
+                                <strong th:text="${user.fullName}">John Doe</strong>
+                            </td>
+                            <td th:text="${user.username}">johndoe</td>
+                            <td th:text="${user.email}">john@example.com</td>
+                            <td>
+                                <span class="badge bg-primary" th:text="${user.role}">ROLE</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    <span th:text="${user.city + ', ' + user.state}">Location</span>
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge bg-success" th:if="${user.enabled}">Active</span>
+                                <span class="badge bg-secondary" th:unless="${user.enabled}">Inactive</span>
+                            </td>
+                            <td>
+                                <span th:if="${user.role != null and user.role.name() == 'VOLUNTEER'}">
+                                    <span class="badge bg-success" th:if="${user.verified}">
+                                        <i class="bi bi-check-circle"></i> Verified
+                                    </span>
+                                    <span class="badge bg-warning text-dark" th:unless="${user.verified}">
+                                        <i class="bi bi-clock"></i> Pending
+                                    </span>
+                                </span>
+                                <span th:unless="${user.role != null and user.role.name() == 'VOLUNTEER'}" class="text-muted">N/A</span>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <!-- Verify Button for Unverified Volunteers -->
+                                    <form th:if="${user.role != null and user.role.name() == 'VOLUNTEER' and !user.verified}"
+                                          th:action="@{/admin/users/{id}/verify(id=${user.id})}" 
+                                          method="post" class="d-inline">
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-success"
+                                                title="Verify Volunteer">
+                                            <i class="bi bi-check-circle"></i> Verify
+                                        </button>
+                                    </form>
+                                    
+                                    <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}" 
+                                          method="post" class="d-inline">
+                                        <button type="submit" 
+                                                class="btn btn-sm btn-warning"
+                                                title="Toggle Status">
+                                            <i class="bi bi-toggle-on"></i>
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" 
+                                          method="post" 
+                                          class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${users.isEmpty()}">
+                            <td colspan="9" class="text-center py-4">
+                                <i class="bi bi-inbox display-4 text-muted"></i>
+                                <p class="text-muted mt-2">No users found</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

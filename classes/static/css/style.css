@@ -1,0 +1,377 @@
+﻿/* SARA - Modern Compassionate Design System */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+--primary: #1E90FF; --primary-light: #63B3FF; --primary-dark: #0066CC;
+--accent: #00BFA6; --accent-light: #4DD0BA; --accent-dark: #00997A;
+--gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-600: #475569; --gray-800: #1E293B;
+--success: #10B981; --warning: #F59E0B; --danger: #EF4444;
+--shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05); --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+--shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1); --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+--shadow-glow: 0 0 20px rgba(30,144,255,0.3); --radius-lg: 1.5rem; --radius-pill: 50rem;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Poppins', sans-serif; background: #F9FAFB; color: var(--gray-800); line-height: 1.6; }
+h1,h2,h3,h4,h5,h6 { font-weight: 600; color: var(--gray-800); }
+p { color: var(--gray-600); }
+
+.navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); transition: all 0.3s; }
+.navbar-brand { font-weight: 700; color: var(--primary) !important; transition: transform 0.15s; }
+.navbar-brand:hover { transform: scale(1.05); }
+.nav-link { color: var(--gray-600) !important; font-weight: 500; transition: color 0.15s; }
+.nav-link:hover { color: var(--primary) !important; }
+
+.hero { background: linear-gradient(135deg, #1E90FF 0%, #00BFA6 100%); color: white; padding: 6rem 0; text-align: center; position: relative; overflow: hidden; }
+.hero h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 1rem; animation: fadeInUp 0.8s; }
+.hero .lead { font-size: 1.5rem; margin-bottom: 2rem; animation: fadeInUp 1s; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+.cta-card { background: white; border-radius: var(--radius-lg); padding: 2rem; text-align: center; box-shadow: var(--shadow-lg); transition: all 0.3s; border: none; height: 100%; }
+.cta-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-xl); }
+.cta-card .icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; box-shadow: var(--shadow-glow); }
+
+.btn { border-radius: var(--radius-pill); padding: 0.75rem 2rem; font-weight: 600; transition: all 0.3s; border: none; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; box-shadow: var(--shadow-md); }
+.btn-primary:hover { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
+.btn-success { background: linear-gradient(135deg, var(--accent), var(--accent-light)); color: white; }
+.btn-success:hover { box-shadow: 0 0 20px rgba(0,191,166,0.3); transform: translateY(-2px); }
+.btn-sm { padding: 0.5rem 1.5rem; font-size: 0.9rem; }
+
+.card { border: none; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); transition: all 0.3s; }
+.card:hover { box-shadow: var(--shadow-xl); transform: translateY(-5px); }
+
+.form-control, .form-select { border: 2px solid var(--gray-200); border-radius: 1rem; padding: 0.75rem 1rem; transition: all 0.15s; }
+.form-control:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,144,255,0.1); outline: none; }
+.form-label { font-weight: 600; color: var(--gray-800); }
+
+.auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #E3F2FD 0%, #F0F9FF 100%); padding: 2rem; }
+.auth-card { max-width: 450px; width: 100%; background: white; border-radius: 2rem; box-shadow: var(--shadow-xl); padding: 2.5rem; position: relative; }
+.auth-card::before { content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 2rem; z-index: -1; }
+.auth-icon { width: 80px; height: 80px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; }
+
+.table { border-radius: 1rem; overflow: hidden; box-shadow: var(--shadow-sm); }
+.table thead { background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; }
+.table thead th { border: none; font-weight: 600; padding: 1rem; }
+.table tbody tr:hover { background: var(--gray-50); }
+.table tbody td { padding: 1rem; }
+
+.badge { border-radius: var(--radius-pill); padding: 0.5rem 1rem; font-weight: 600; }
+.bg-success { background: var(--success) !important; }
+.bg-warning { background: var(--warning) !important; }
+.bg-danger { background: var(--danger) !important; }
+
+.alert { border: none; border-radius: 1rem; padding: 1rem 1.5rem; box-shadow: var(--shadow-sm); }
+.alert-success { background: rgba(16,185,129,0.1); color: var(--success); border-left: 4px solid var(--success); }
+.alert-danger { background: rgba(239,68,68,0.1); color: var(--danger); border-left: 4px solid var(--danger); }
+.alert-warning { background: rgba(245,158,11,0.1); color: var(--warning); border-left: 4px solid var(--warning); }
+
+.footer { background: linear-gradient(135deg, #1E90FF 0%, #00BFA6 100%); color: white; padding: 2rem 0; margin-top: 4rem; text-align: center; }
+.footer p { color: rgba(255,255,255,0.9); margin: 0; }
+
+.stats-card { background: white; border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow-md); transition: all 0.3s; }
+.stats-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-5px); }
+.stats-card h3 { font-size: 2rem; font-weight: 700; }
+
+@media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .hero .lead { font-size: 1.2rem; } }
+
+/* ========================================
+   VERIFICATION PAGES - MODERN DESIGN
+   ======================================== */
+
+/* Hover Lift Effect for Cards */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Resource Card Animations */
+.resource-card {
+    transition: all 0.4s ease;
+    overflow: hidden;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+}
+
+.resource-card .status-banner {
+    transition: all 0.3s ease;
+}
+
+.resource-card:hover .status-banner {
+    padding: 0.75rem 0;
+}
+
+/* Resource Verification Card */
+.resource-verify-card {
+    border-left: 5px solid transparent;
+    transition: all 0.4s ease;
+}
+
+.resource-verify-card:hover {
+    border-left-color: #28a745;
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(40, 167, 69, 0.15) !important;
+}
+
+/* Delivery Card */
+.delivery-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 4px solid transparent;
+}
+
+.delivery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Status Progress Gradients */
+.bg-gradient-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%) !important;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #00bcd4 100%) !important;
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%) !important;
+}
+
+/* Progress Steps Animation */
+.delivery-steps .step {
+    transition: all 0.3s ease;
+}
+
+.delivery-steps .step-completed {
+    animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.delivery-steps .step-icon {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.delivery-steps .step-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Button Enhancements */
+.btn-lg {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-lg:active {
+    transform: translateY(0);
+}
+
+/* Empty State Animation */
+.empty-state i {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Badge Pulse Animation */
+.badge.bg-warning {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+/* Card Body Hover Effects */
+.card-body {
+    transition: all 0.3s ease;
+}
+
+.card:hover .card-body {
+    padding: 1.5rem;
+}
+
+/* Resource Details Box */
+.resource-details {
+    transition: all 0.3s ease;
+}
+
+.resource-card:hover .resource-details {
+    transform: scale(1.02);
+}
+
+/* Smooth Color Transitions */
+.text-primary, .text-success, .text-warning, .text-danger, .text-info {
+    transition: color 0.3s ease;
+}
+
+/* Icon Spin on Hover */
+.bi-truck, .bi-box-seam, .bi-clipboard-check, .bi-check-circle {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .bi-truck {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Quick Action Button Hover */
+.btn-outline-success:hover,
+.btn-outline-primary:hover,
+.btn-outline-warning:hover,
+.btn-outline-info:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Status Banner Shine Effect */
+.status-banner {
+    position: relative;
+    overflow: hidden;
+}
+
+.status-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.card:hover .status-banner::before {
+    left: 100%;
+}
+
+/* Alert Enhancement */
+.alert {
+    animation: slideInDown 0.5s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Button Ripple Effect */
+button[type="submit"] {
+    position: relative;
+    overflow: hidden;
+}
+
+button[type="submit"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button[type="submit"]:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Gradient Headers */
+.card-header {
+    transition: all 0.3s ease;
+}
+
+.card:hover .card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+}
+
+/* Smooth Fade-in for Cards on Page Load */
+.resource-card,
+.resource-verify-card,
+.delivery-card {
+    animation: fadeInUp 0.6s ease both;
+}
+
+.resource-card:nth-child(1) { animation-delay: 0.1s; }
+.resource-card:nth-child(2) { animation-delay: 0.2s; }
+.resource-card:nth-child(3) { animation-delay: 0.3s; }
+.resource-card:nth-child(4) { animation-delay: 0.4s; }
+.resource-card:nth-child(5) { animation-delay: 0.5s; }
+.resource-card:nth-child(6) { animation-delay: 0.6s; }
+
+.resource-verify-card:nth-child(1) { animation-delay: 0.1s; }
+.resource-verify-card:nth-child(2) { animation-delay: 0.2s; }
+.resource-verify-card:nth-child(3) { animation-delay: 0.3s; }
+.resource-verify-card:nth-child(4) { animation-delay: 0.4s; }
+
+.delivery-card:nth-child(1) { animation-delay: 0.1s; }
+.delivery-card:nth-child(2) { animation-delay: 0.2s; }
+.delivery-card:nth-child(3) { animation-delay: 0.3s; }
+.delivery-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+    .hover-lift:hover {
+        transform: translateY(-4px);
+    }
+    
+    .resource-card:hover {
+        transform: translateY(-3px) scale(1.01);
+    }
+    
+    .resource-verify-card:hover {
+        transform: translateY(-4px) scale(1);
+    }
+}
+

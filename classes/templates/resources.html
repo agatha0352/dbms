@@ -1,0 +1,55 @@
+<!-- All Resources List Page (Public) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Resources - Smart Aid and Relief Alliance</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<div class="container py-4">
+    <h2>All Resources</h2>
+    <form method="get" th:action="@{/resources}" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <select class="form-select" name="type" th:value="${selectedType}">
+                <option value="" th:selected="${selectedType} == null">-- Filter by Type --</option>
+                <option th:each="t : ${resourceTypes}" th:value="${t}" th:text="${t}" th:selected="${selectedType} == ${t}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="location" th:value="${selectedLocation}" placeholder="Filter by Location">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Verified</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="resource : ${resources}">
+                <td th:text="${resource.name}"></td>
+                <td th:text="${resource.type}"></td>
+                <td th:text="${resource.description}"></td>
+                <td th:text="${resource.quantity}"></td>
+                <td th:text="${resource.expiryDate != null ? resource.expiryDate : 'N/A'}"></td>
+                <td th:text="${resource.location}"></td>
+                <td><span class="badge bg-secondary" th:text="${resource.status}"></span></td>
+                <td><span class="badge" th:classappend="${resource.verified} ? 'bg-success' : 'bg-warning text-dark'" th:text="${resource.verified} ? 'Verified' : 'Pending'"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="fragments/layout :: footer"></th:block>
+</body>
+</html>

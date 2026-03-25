@@ -1,0 +1,46 @@
+<!-- Donor Resources List Page -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Resources - Smart Aid and Relief Alliance</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<div class="container py-4">
+    <h2>My Resources</h2>
+    <a th:href="@{/donor/resources/new}" class="btn btn-success mb-3">Add Resource</a>
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Verified</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="resource : ${resources}">
+                <td th:text="${resource.name}"></td>
+                <td th:text="${resource.type}"></td>
+                <td th:text="${resource.quantity}"></td>
+                <td th:text="${resource.expiryDate != null ? resource.expiryDate : 'N/A'}"></td>
+                <td>
+                    <span class="badge bg-secondary" th:text="${resource.status}"></span>
+                </td>
+                <td>
+                    <span class="badge" th:classappend="${resource.verified} ? 'bg-success' : 'bg-warning text-dark'" th:text="${resource.verified} ? 'Verified' : 'Pending'"></span>
+                </td>
+                <td>
+                    <a th:href="@{'/donor/resources/' + ${resource.id} + '/edit'}" class="btn btn-sm btn-primary">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="fragments/layout :: footer"></th:block>
+</body>
+</html>
