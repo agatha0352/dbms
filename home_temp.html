@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home - SARA</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="container">
+            <h1><i class="bi bi-heart-fill me-3"></i>Smart Aid Resource Assistant</h1>
+            <p class="lead">Connecting hearts when disasters strike.</p>
+            <p class="lead">Helping communities find hope, resources, and support in times of crisis.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Cards Section -->
+<section class="section-padding bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Get Help Card -->
+            <div class="col-md-4">
+                <div class="cta-card">
+                    <div class="icon">
+                        <i class="bi bi-hand-thumbs-up-fill"></i>
+                    </div>
+                    <h3>Get Help</h3>
+                    <p>Find essential resources and support during emergencies. Access food, shelter, medical supplies, and more.</p>
+                    <a th:href="@{/resources}" class="btn btn-primary">Browse Resources</a>
+                </div>
+            </div>
+            
+            <!-- Donate Card -->
+            <div class="col-md-4">
+                <div class="cta-card">
+                    <div class="icon">
+                        <i class="bi bi-gift-fill"></i>
+                    </div>
+                    <h3>Donate</h3>
+                    <p>Share resources with those in need. Your contribution can make a life-changing difference.</p>
+                    <a th:href="@{/register}" class="btn btn-success">Start Donating</a>
+                </div>
+            </div>
+            
+            <!-- Volunteer Card -->
+            <div class="col-md-4">
+                <div class="cta-card">
+                    <div class="icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <h3>Volunteer</h3>
+                    <p>Join our community of helpers. Deliver aid, coordinate relief efforts, and save lives.</p>
+                    <a th:href="@{/register}" class="btn btn-primary">Join Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section (if user is authenticated) -->
+<section class="section-padding" sec:authorize="isAuthenticated()">
+    <div class="container">
+        <h2 class="text-center mb-5 text-gradient">Platform Overview</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #1E90FF, #00BFA6);">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+                    <h3 th:text="${totalResources != null ? totalResources : 0}">0</h3>
+                    <p>Total Resources</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #10B981, #4DD0BA);">
+                        <i class="bi bi-chat-left-heart"></i>
+                    </div>
+                    <h3 th:text="${totalRequests != null ? totalRequests : 0}">0</h3>
+                    <p>Active Requests</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon mx-auto" style="background: linear-gradient(135deg, #F59E0B, #FCD34D);">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 th:text="${totalUsers != null ? totalUsers : 0}">0</h3>
+                    <p>Community Members</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Activity Section -->
+<section class="section-padding bg-light" th:if="${recentResources != null and !recentResources.isEmpty()}">
+    <div class="container">
+        <h2 class="text-center mb-5">Recent Resources</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4" th:each="resource : ${recentResources}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${resource.name}">Resource Name</h5>
+                        <p class="card-text text-muted mb-2">
+                            <i class="bi bi-tag me-2"></i><span th:text="${resource.type}">Type</span>
+                        </p>
+                        <p class="card-text text-muted mb-2">
+                            <i class="bi bi-geo-alt me-2"></i><span th:text="${resource.location}">Location</span>
+                        </p>
+                        <p class="card-text mb-3">
+                            <span class="badge bg-success" th:text="'Qty: ' + ${resource.quantity}">Quantity</span>
+                            <span class="badge" th:classappend="${resource.verified} ? 'bg-info' : 'bg-warning'" th:text="${resource.verified} ? 'Verified' : 'Pending'">Status</span>
+                        </p>
+                        <a th:href="@{/resources}" class="btn btn-sm btn-primary">View All Resources</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action (if not authenticated) -->
+<section class="section-padding" sec:authorize="!isAuthenticated()">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Make a Difference?</h2>
+        <p class="lead mb-4">Join SARA today and be part of a compassionate community dedicated to helping others.</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a th:href="@{/register}" class="btn btn-success btn-lg">Register Now</a>
+            <a th:href="@{/login}" class="btn btn-primary btn-lg">Login</a>
+        </div>
+    </div>
+</section>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

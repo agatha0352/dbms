@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Verify Pending Resources - SARA Volunteer</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+    <div class="container mt-4 mb-5">
+        <!-- Header Section with Gradient -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 20px;">
+                    <div class="card-body p-4 text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1 class="h2 mb-2">
+                                    <i class="bi bi-clipboard2-check-fill me-2"></i>
+                                    Resource Verification Queue
+                                </h1>
+                                <p class="mb-0 opacity-90">
+                                    <i class="bi bi-shield-check me-1"></i>
+                                    Review and verify donated resources to help them reach those in need
+                                </p>
+                            </div>
+                            <a th:href="@{/volunteer/dashboard}" class="btn btn-light btn-lg shadow-sm" style="border-radius: 15px;">
+                                <i class="bi bi-house-door me-2"></i>Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Alert with Modern Design -->
+        <div class="alert border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); border-radius: 15px; border-left: 5px solid #00acc1;">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill text-info me-3" style="font-size: 2rem;"></i>
+                <div>
+                    <h6 class="mb-1 fw-bold text-info">Your Important Role</h6>
+                    <p class="mb-0 text-muted">
+                        As a volunteer, you verify resources posted by donors before they become visible to needers. 
+                        Please review each resource carefully to ensure quality and accuracy.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Resources Section -->
+        <div class="row">
+            <div class="col-12">
+                <!-- Empty State -->
+                <div th:if="${#lists.isEmpty(resources)}" class="text-center py-5">
+                    <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                        <div class="card-body p-5">
+                            <div class="mb-4" style="font-size: 6rem; color: #28a745; opacity: 0.2;">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                            <h3 class="mb-3 fw-bold text-success">All Caught Up! 🎉</h3>
+                            <p class="text-muted mb-4 lead">
+                                There are no pending resources to verify at the moment.
+                            </p>
+                            <a th:href="@{/volunteer/dashboard}" class="btn btn-primary btn-lg" style="border-radius: 12px;">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resources Grid -->
+                <div th:unless="${#lists.isEmpty(resources)}">
+                    <div class="row g-4">
+                        <div class="col-lg-6" th:each="resource : ${resources}">
+                            <div class="card border-0 shadow-sm h-100 resource-verify-card" style="border-radius: 15px; transition: all 0.3s ease;">
+                                <!-- Resource Header with Type Badge -->
+                                <div class="card-header border-0 pt-4 pb-0" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="flex-grow-1">
+                                            <h4 class="mb-2 fw-bold" th:text="${resource.name}">Resource Name</h4>
+                                            <span class="badge rounded-pill fs-6 bg-secondary" 
+                                                  th:text="${resource.type}">Type</span>
+                                        </div>
+                                        <div class="text-end">
+                                            <small class="text-muted d-block">
+                                                <i class="bi bi-calendar3"></i>
+                                                <span th:text="${resource.createdAt}">Date</span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <!-- Description -->
+                                    <div class="mb-3 p-3" style="background-color: #f8f9fa; border-radius: 10px;">
+                                        <p class="mb-0 text-muted" th:text="${resource.description}">Resource description here</p>
+                                    </div>
+
+                                    <!-- Resource Details Grid -->
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-6">
+                                            <div class="p-3 text-center" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 10px;">
+                                                <i class="bi bi-box-seam text-primary d-block mb-2" style="font-size: 1.5rem;"></i>
+                                                <div class="fw-bold" th:text="${resource.quantity}">0</div>
+                                                <small class="text-muted">Quantity</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-3 text-center" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); border-radius: 10px;">
+                                                <i class="bi bi-clock-history text-danger d-block mb-2" style="font-size: 1.5rem;"></i>
+                                                <div class="fw-bold">
+                                                    <span th:text="${resource.createdAt}">Age</span>
+                                                </div>
+                                                <small class="text-muted">Posted</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="mb-3 p-3" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 10px;">
+                                        <div class="d-flex align-items-start">
+                                            <i class="bi bi-geo-alt-fill text-danger me-2 mt-1" style="font-size: 1.2rem;"></i>
+                                            <div>
+                                                <small class="text-muted d-block mb-1">Pickup Location</small>
+                                                <span class="fw-bold" th:text="${resource.location}">Location</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3 p-3 bg-light" style="border-radius: 10px;">
+                                        <div class="d-flex align-items-start">
+                                            <i class="bi bi-calendar-event-fill text-secondary me-2 mt-1" style="font-size: 1.2rem;"></i>
+                                            <div>
+                                                <small class="text-muted d-block mb-1">Expiry Date</small>
+                                                <span class="fw-bold" th:text="${resource.expiryDate != null ? resource.expiryDate : 'N/A'}">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Donor Information -->
+                                    <div class="mb-3 p-3" style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 10px;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <small class="text-muted d-block mb-1">
+                                                    <i class="bi bi-person-circle"></i> Donor
+                                                </small>
+                                                <span class="fw-bold" th:text="${resource.user.fullName}">Donor Name</span>
+                                            </div>
+                                            <div class="text-end">
+                                                <small class="text-muted d-block mb-1">
+                                                    <i class="bi bi-telephone"></i> Contact
+                                                </small>
+                                                <span class="fw-bold" th:text="${resource.user.phoneNumber}">Phone</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Verification Action -->
+                                    <form th:action="@{/volunteer/resources/{id}/verify(id=${resource.id})}" 
+                                          method="post" 
+                                          onsubmit="return confirm('⚠️ Are you sure you want to verify this resource?\n\nOnce verified, it will become visible to needers who need help.');"
+                                          class="mt-4">
+                                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold shadow" style="border-radius: 12px;">
+                                            <i class="bi bi-check-circle-fill me-2"></i>
+                                            Verify This Resource
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

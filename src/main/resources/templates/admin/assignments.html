@@ -1,0 +1,31 @@
+<!-- Admin Manage Assignments Page -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Assignments - Smart Aid and Relief Alliance</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<div class="container py-4">
+    <h2>Manage Assignments</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>Volunteer</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="assignment : ${assignments}">
+                <td th:text="${assignment.request.title}"></td>
+                <td th:text="${assignment.volunteer.fullName}"></td>
+                <td th:text="${assignment.status}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="fragments/layout :: footer"></th:block>
+</body>
+</html>

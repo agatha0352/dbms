@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}">
+    <title>Donor Dashboard - SARA</title>
+</head>
+<body>
+    <nav th:replace="~{fragments/layout :: navbar}"></nav>
+    
+    <div th:replace="~{fragments/layout :: alerts}"></div>
+
+    <div class="container mt-4 mb-5">
+        <!-- Header Section with Gradient -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px;">
+                    <div class="card-body p-4 text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1 class="h2 mb-2">
+                                    <i class="bi bi-heart-fill me-2"></i>
+                                    Welcome, <span th:text="${user?.fullName ?: 'Donor'}">Donor</span>!
+                                </h1>
+                                <p class="mb-0 opacity-90">
+                                    <i class="bi bi-star-fill me-1"></i>
+                                    Thank you for making a difference in people's lives
+                                </p>
+                            </div>
+                            <a th:href="@{/donor/resources/new}" class="btn btn-light btn-lg shadow-sm" style="border-radius: 15px;">
+                                <i class="bi bi-plus-circle me-2"></i>Add New Resource
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards with Modern Design -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift" style="border-radius: 15px; border-left: 5px solid #28a745;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-box-seam text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-success mb-2" th:text="${totalResources ?: 0}">0</h2>
+                        <h6 class="text-muted mb-1">Total Resources</h6>
+                        <small class="text-muted">Resources you've contributed</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift" style="border-radius: 15px; border-left: 5px solid #17a2b8;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-check-circle text-info" style="font-size: 3rem;"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-info mb-2" th:text="${availableResources ?: 0}">0</h2>
+                        <h6 class="text-muted mb-1">Available</h6>
+                        <small class="text-muted">Ready for distribution</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100 hover-lift" style="border-radius: 15px; border-left: 5px solid #ffc107;">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-clock-history text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                            <h2 class="display-4 fw-bold text-warning mb-2" th:text="${(totalResources ?: 0) - (availableResources ?: 0)}">0</h2>
+                        <h6 class="text-muted mb-1">In Process</h6>
+                        <small class="text-muted">Being verified or delivered</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Your Resources Section with Modern Card Design -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                    <div class="card-header bg-white border-0 pt-4 pb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">
+                                <i class="bi bi-box2-heart text-primary me-2"></i>
+                                Your Contributions
+                            </h4>
+                            <a th:href="@{/donor/resources}" class="btn btn-outline-primary" style="border-radius: 10px;">
+                                <i class="bi bi-grid-3x3-gap me-1"></i>
+                                View All
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div th:if="${userResources != null and !userResources.isEmpty()}">
+                            <div class="row g-4">
+                                <div class="col-md-6 col-lg-4" th:each="resource, iterStat : ${userResources}" th:if="${iterStat.index < 6}">
+                                    <div class="card h-100 border-0 shadow-sm resource-card" style="border-radius: 15px; overflow: hidden;">
+                                        <!-- Status Banner -->
+                                        <div class="status-banner text-white text-center py-2 fw-bold bg-warning">
+                                            <i class="bi bi-clock-history"></i>
+                                            <span th:if="${resource.status != null and resource.status.name() == 'DELIVERED'}">DELIVERED</span>
+                                            <span th:if="${resource.status != null and resource.status.name() == 'RESERVED'}">ASSIGNED</span>
+                                            <span th:if="${resource.status == null or (resource.status.name() != 'DELIVERED' and resource.status.name() != 'RESERVED')}">PENDING</span>
+                                        </div>
+                                        
+                                        <div class="card-body p-3">
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <h5 class="card-title mb-0 fw-bold" th:text="${resource.name}">Resource Name</h5>
+                                                    <span class="badge rounded-pill bg-secondary" th:text="${resource.type}">Type</span>
+                                                </div>
+                                                <p class="card-text text-muted small mb-3" th:text="${resource.description}">Description</p>
+                                            </div>
+                                            
+                                            <div class="resource-details">
+                                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                                    <span class="text-muted small">
+                                                        <i class="bi bi-box-seam text-primary me-1"></i>Quantity
+                                                    </span>
+                                                    <span class="fw-bold" th:text="${resource.quantity}">0</span>
+                                                </div>
+                                                
+                                                <div class="mb-2">
+                                                    <p class="mb-1 small text-muted">
+                                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                                        <span th:text="${resource.location}">Location</span>
+                                                    </p>
+                                                </div>
+                                                
+                                                <div class="mt-3 pt-2 border-top">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-calendar3 me-1"></i>
+                                                            Posted <span th:text="${resource.createdAt}">Date</span>
+                                                        </small>
+                                                        <a th:href="@{/donor/resources/{id}(id=${resource.id})}" 
+                                                           class="btn btn-sm btn-outline-primary" 
+                                                           style="border-radius: 8px;">
+                                                            <i class="bi bi-eye me-1"></i>View
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${userResources == null or userResources.isEmpty()}" class="text-center py-5">
+                            <div class="empty-state">
+                                <i class="bi bi-box-seam text-muted mb-3" style="font-size: 5rem; opacity: 0.3;"></i>
+                                <h5 class="text-muted mb-3">No resources posted yet</h5>
+                                <p class="text-muted mb-4">Start making a difference today by sharing resources with those in need.</p>
+                                <a th:href="@{/donor/resources/new}" class="btn btn-primary btn-lg" style="border-radius: 12px;">
+                                    <i class="bi bi-plus-circle me-2"></i>Add Your First Resource
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section with Modern Icons -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+                    <div class="card-header bg-white border-0 pt-4 pb-3">
+                        <h4 class="mb-0">
+                            <i class="bi bi-lightning-charge text-warning me-2"></i>
+                            Quick Actions
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-3 col-6">
+                                <a th:href="@{/donor/resources/new}" class="btn btn-outline-success w-100 py-3 hover-lift" style="border-radius: 12px; border-width: 2px;">
+                                    <i class="bi bi-plus-circle-fill d-block mb-2" style="font-size: 2.5rem;"></i>
+                                    <span class="fw-bold">Add Resource</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <a th:href="@{/donor/resources}" class="btn btn-outline-primary w-100 py-3 hover-lift" style="border-radius: 12px; border-width: 2px;">
+                                    <i class="bi bi-list-task d-block mb-2" style="font-size: 2.5rem;"></i>
+                                    <span class="fw-bold">Manage Resources</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <a th:href="@{/requests}" class="btn btn-outline-warning w-100 py-3 hover-lift" style="border-radius: 12px; border-width: 2px;">
+                                    <i class="bi bi-megaphone-fill d-block mb-2" style="font-size: 2.5rem;"></i>
+                                    <span class="fw-bold">View Requests</span>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-6">
+                                <a th:href="@{/resources}" class="btn btn-outline-info w-100 py-3 hover-lift" style="border-radius: 12px; border-width: 2px;">
+                                    <i class="bi bi-search-heart d-block mb-2" style="font-size: 2.5rem;"></i>
+                                    <span class="fw-bold">Browse All</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+    <div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

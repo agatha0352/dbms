@@ -1,0 +1,51 @@
+<!-- All Requests List Page (Public) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Requests - Smart Aid and Relief Alliance</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<div class="container py-4">
+    <h2>All Requests</h2>
+    <form method="get" th:action="@{/requests}" class="row g-2 mb-3">
+        <div class="col-md-4">
+            <select class="form-select" name="urgency" th:value="${selectedUrgency}">
+                <option value="" th:selected="${selectedUrgency} == null">-- Filter by Urgency --</option>
+                <option th:each="u : ${urgencyLevels}" th:value="${u}" th:text="${u}" th:selected="${selectedUrgency} == ${u}"></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="text" class="form-control" name="location" th:value="${selectedLocation}" placeholder="Filter by Location">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Urgency</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Requested By</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.title}"></td>
+                <td th:text="${request.description}"></td>
+                <td th:text="${request.urgency}"></td>
+                <td th:text="${request.location}"></td>
+                <td><span class="badge bg-secondary" th:text="${request.status}"></span></td>
+                <td th:text="${request.user != null ? request.user.username : 'Anonymous'}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<th:block th:replace="fragments/layout :: footer"></th:block>
+</body>
+</html>

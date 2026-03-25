@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>My Deliveries - SARA Volunteer</title>
+    <th:block th:replace="fragments/layout :: head"></th:block>
+</head>
+<body>
+<th:block th:replace="fragments/layout :: navbar"></th:block>
+<th:block th:replace="fragments/layout :: alerts"></th:block>
+
+    <div class="container mt-4 mb-5">
+        <!-- Header Section with Gradient -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 20px;">
+                    <div class="card-body p-4 text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1 class="h2 mb-2">
+                                    <i class="bi bi-truck me-2"></i>
+                                    My Resource Deliveries
+                                </h1>
+                                <p class="mb-0 opacity-90">
+                                    <i class="bi bi-clipboard-check me-1"></i>
+                                    Track and manage your assigned resource deliveries
+                                </p>
+                            </div>
+                            <a th:href="@{/volunteer/dashboard}" class="btn btn-light btn-lg shadow-sm" style="border-radius: 15px;">
+                                <i class="bi bi-house-door me-2"></i>Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deliveries Section -->
+        <div class="row">
+            <div class="col-12">
+                <!-- Empty State -->
+                <div th:if="${#lists.isEmpty(deliveries)}" class="text-center py-5">
+                    <div class="card border-0 shadow-sm" style="border-radius: 20px;">
+                        <div class="card-body p-5">
+                            <div class="mb-4" style="font-size: 6rem; color: #17a2b8; opacity: 0.2;">
+                                <i class="bi bi-inbox"></i>
+                            </div>
+                            <h3 class="mb-3 fw-bold">No Active Deliveries</h3>
+                            <p class="text-muted mb-4 lead">
+                                You don't have any resource deliveries assigned yet.
+                            </p>
+                            <a th:href="@{/volunteer/dashboard}" class="btn btn-primary btn-lg me-2" style="border-radius: 12px;">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            <a th:href="@{/volunteer/resources/pending}" class="btn btn-outline-success btn-lg" style="border-radius: 12px;">
+                                <i class="bi bi-clipboard-check me-2"></i>Verify Resources
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deliveries Grid -->
+                <div th:unless="${#lists.isEmpty(deliveries)}">
+                    <div class="row g-4">
+                        <div class="col-lg-6" th:each="delivery : ${deliveries}">
+                            <div class="card border-0 shadow-sm h-100 delivery-card" style="border-radius: 15px;">
+                                <!-- Status Banner with Progress -->
+                                <div class="position-relative">
+                                    <div class="status-progress text-white text-center py-3 fw-bold bg-info"
+                                         th:classappend="${delivery.status.name() == 'DELIVERED'} ? 'bg-success' :
+                                                        ${delivery.status.name() == 'IN_TRANSIT'} ? 'bg-warning' :
+                                                        ${delivery.status.name() == 'CANCELLED'} ? 'bg-danger' : 'bg-info'">
+                                        <div class="container">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <i class="bi bi-hourglass-split"
+                                                       th:classappend="${delivery.status.name() == 'DELIVERED'} ? 'bi-check-circle-fill' :
+                                                                      ${delivery.status.name() == 'IN_TRANSIT'} ? 'bi-truck' :
+                                                                      ${delivery.status.name() == 'CANCELLED'} ? 'bi-x-circle-fill' : 'bi-hourglass-split'"></i>
+                                                    <span th:text="${delivery.status}">Status</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Progress Steps -->
+                                    <div class="delivery-steps p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="step text-center flex-fill" 
+                                                 th:classappend="${delivery.status.name() != 'CANCELLED'} ? 'step-completed' : ''">
+                                                <div class="step-icon rounded-circle mx-auto mb-1" 
+                                                     style="width: 40px; height: 40px; line-height: 40px;"
+                                                     th:style="${delivery.status.name() != 'CANCELLED'} ? 'background-color: #28a745; color: white;' : 'background-color: #e9ecef; color: #6c757d;'">
+                                                    <i class="bi bi-check"></i>
+                                                </div>
+                                                <small class="fw-bold">Assigned</small>
+                                            </div>
+                                            <div class="step-line flex-fill" 
+                                                 th:style="${delivery.status.name() == 'IN_TRANSIT' || delivery.status.name() == 'DELIVERED'} ? 'background-color: #28a745;' : 'background-color: #dee2e6;'"
+                                                 style="height: 3px; margin: 0 10px;"></div>
+                                            <div class="step text-center flex-fill"
+                                                 th:classappend="${delivery.status.name() == 'IN_TRANSIT' || delivery.status.name() == 'DELIVERED'} ? 'step-completed' : ''">
+                                                <div class="step-icon rounded-circle mx-auto mb-1" 
+                                                     style="width: 40px; height: 40px; line-height: 40px;"
+                                                     th:style="${delivery.status.name() == 'IN_TRANSIT' || delivery.status.name() == 'DELIVERED'} ? 'background-color: #28a745; color: white;' : 'background-color: #e9ecef; color: #6c757d;'">
+                                                    <i class="bi bi-truck"></i>
+                                                </div>
+                                                <small class="fw-bold">In Transit</small>
+                                            </div>
+                                            <div class="step-line flex-fill" 
+                                                 th:style="${delivery.status.name() == 'DELIVERED'} ? 'background-color: #28a745;' : 'background-color: #dee2e6;'"
+                                                 style="height: 3px; margin: 0 10px;"></div>
+                                            <div class="step text-center flex-fill"
+                                                 th:classappend="${delivery.status.name() == 'DELIVERED'} ? 'step-completed' : ''">
+                                                <div class="step-icon rounded-circle mx-auto mb-1" 
+                                                     style="width: 40px; height: 40px; line-height: 40px;"
+                                                     th:style="${delivery.status.name() == 'DELIVERED'} ? 'background-color: #28a745; color: white;' : 'background-color: #e9ecef; color: #6c757d;'">
+                                                    <i class="bi bi-check-circle"></i>
+                                                </div>
+                                                <small class="fw-bold">Delivered</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <!-- Resource Header -->
+                                    <div class="mb-3">
+                                        <h4 class="fw-bold mb-2" th:text="${delivery.resource.name}">Resource Name</h4>
+                                        <span class="badge rounded-pill fs-6" 
+                                              th:classappend="${delivery.resource.type == 'FOOD'} ? 'bg-danger' :
+                                                            (${delivery.resource.type == 'WATER'} ? 'bg-info' :
+                                                            (${delivery.resource.type == 'MEDICINE'} ? 'bg-success' :
+                                                            (${delivery.resource.type == 'SHELTER'} ? 'bg-warning' : 'bg-secondary')))"
+                                              th:text="${delivery.resource.type}">Type</span>
+                                    </div>
+
+                                    <!-- Resource Details -->
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-6">
+                                            <div class="p-3" style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-radius: 10px;">
+                                                <i class="bi bi-box-seam text-primary d-block mb-1"></i>
+                                                <div class="fw-bold" th:text="${delivery.resource.quantity}">0</div>
+                                                <small class="text-muted">Quantity</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-3" style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-radius: 10px;">
+                                                <i class="bi bi-person-circle text-warning d-block mb-1"></i>
+                                                <div class="fw-bold small" th:text="${#strings.abbreviate(delivery.resource.user.fullName, 15)}">Donor</div>
+                                                <small class="text-muted">Donor</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Location Info -->
+                                    <div class="mb-3 p-3" style="background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%); border-radius: 10px;">
+                                        <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                        <small class="text-muted d-block mb-1">Pickup Location</small>
+                                        <span class="fw-bold" th:text="${delivery.resource.location}">Location</span>
+                                    </div>
+
+                                    <!-- Timeline -->
+                                    <div class="mb-3 p-3" style="background-color: #f8f9fa; border-radius: 10px;">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <div>
+                                                <i class="bi bi-calendar-check text-info"></i>
+                                                <small class="text-muted">Assigned</small>
+                                            </div>
+                                            <small class="fw-bold" th:text="${#temporals.format(delivery.assignedAt, 'MMM dd, HH:mm')}">Date</small>
+                                        </div>
+                                        <div th:if="${delivery.deliveredAt != null}" class="d-flex justify-content-between">
+                                            <div>
+                                                <i class="bi bi-check-circle text-success"></i>
+                                                <small class="text-muted">Delivered</small>
+                                            </div>
+                                            <small class="fw-bold" th:text="${#temporals.format(delivery.deliveredAt, 'MMM dd, HH:mm')}">Date</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Notes -->
+                                    <div th:if="${delivery.notes != null && !#strings.isEmpty(delivery.notes)}" 
+                                         class="alert alert-secondary mb-3" style="border-radius: 10px;">
+                                        <i class="bi bi-sticky-fill text-warning me-2"></i>
+                                        <strong>Delivery Notes:</strong>
+                                        <p class="mb-0 mt-2" th:text="${delivery.notes}"></p>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <div th:if="${delivery.status.name() != 'DELIVERED' && delivery.status.name() != 'CANCELLED'}" 
+                                         class="d-grid gap-2">
+                                        <form th:action="@{/volunteer/deliveries/{id}/status(id=${delivery.id})}" 
+                                              method="post"
+                                              th:if="${delivery.status.name() == 'ASSIGNED'}">
+                                            <input type="hidden" name="status" value="IN_TRANSIT"/>
+                                            <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold" style="border-radius: 10px;">
+                                                <i class="bi bi-truck me-2"></i>Start Delivery
+                                            </button>
+                                        </form>
+
+                                        <div th:if="${delivery.status.name() == 'IN_TRANSIT'}" class="row g-2">
+                                            <div class="col-8">
+                                                <form th:action="@{/volunteer/deliveries/{id}/status(id=${delivery.id})}" 
+                                                      method="post" class="h-100">
+                                                    <input type="hidden" name="status" value="DELIVERED"/>
+                                                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold h-100" style="border-radius: 10px;">
+                                                        <i class="bi bi-check-circle-fill me-2"></i>Mark Delivered
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-4">
+                                                <form th:action="@{/volunteer/deliveries/{id}/cancel(id=${delivery.id})}" 
+                                                      method="post" 
+                                                      onsubmit="return confirm('⚠️ Cancel this delivery?');"
+                                                      class="h-100">
+                                                    <button type="submit" class="btn btn-danger btn-lg w-100 h-100" style="border-radius: 10px;">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Completed Badge -->
+                                    <div th:if="${delivery.status.name() == 'DELIVERED'}" 
+                                         class="alert alert-success mb-0" style="border-radius: 10px;">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        <strong>Delivery Completed!</strong> Thank you for your service.
+                                    </div>
+
+                                    <!-- Cancelled Badge -->
+                                    <div th:if="${delivery.status.name() == 'CANCELLED'}" 
+                                         class="alert alert-danger mb-0" style="border-radius: 10px;">
+                                        <i class="bi bi-x-circle-fill me-2"></i>
+                                        <strong>Delivery Cancelled</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<th:block th:replace="fragments/layout :: footer"></th:block>
+<th:block th:replace="fragments/layout :: scripts"></th:block>
+</body>
+</html>

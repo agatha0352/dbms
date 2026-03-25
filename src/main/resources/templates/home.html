@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home - SARA</title>
+    <th:block th:replace="~{fragments/layout :: head}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{fragments/layout :: navbar}"></th:block>
+<th:block th:replace="~{fragments/layout :: alerts}"></th:block>
+
+<section class="hero text-center text-white py-5" style="background: linear-gradient(135deg, #1E90FF, #00BFA6); font-family: 'Poppins', 'Inter', sans-serif;">
+    <div class="container">
+        <h1 class="fw-bold mb-3" style="font-size:2.5rem; text-shadow:0 2px 8px rgba(30,144,255,0.12); letter-spacing:1px;"><i class="bi bi-heart-fill me-2" style="background:rgba(0,191,166,0.15); border-radius:50%; padding:0.5rem;"></i>Smart Aid Resource Alliance (SARA)</h1>
+        <p class="lead mb-4" style="font-weight:300; font-size:1.2rem; text-shadow:0 1px 4px rgba(0,191,166,0.10);">Connecting hearts when disasters strike. Helping communities find hope and resources.</p>
+        <a href="/register" class="btn btn-light btn-lg rounded-pill shadow-sm px-4" style="color:#00BFA6; font-weight:600; box-shadow:0 0 16px rgba(0,191,166,0.10); transition:box-shadow 0.3s;">Get Started</a>
+    </div>
+</section>
+
+<section class="section-padding bg-light" style="background:#F9FAFB; font-family:'Poppins','Inter',sans-serif;">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4 col-sm-6">
+                <div class="cta-card h-100 shadow-sm border-0 p-4" style="border-radius:1.5rem;">
+                    <div class="icon mb-3" style="background:linear-gradient(135deg,#1E90FF,#00BFA6); box-shadow:0 2px 16px rgba(30,144,255,0.10);">
+                        <i class="bi bi-hand-thumbs-up-fill" style="font-size:2.2rem;"></i>
+                    </div>
+                    <h3 class="fw-semibold mb-2" style="color:#1E90FF;">Get Help</h3>
+                    <p class="mb-3" style="color:#555;">Find essential resources and support during emergencies.</p>
+                    <a th:href="@{/resources}" class="btn btn-primary rounded-pill px-4">Browse Resources</a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="cta-card h-100 shadow-sm border-0 p-4" style="border-radius:1.5rem;">
+                    <div class="icon mb-3" style="background:linear-gradient(135deg,#00BFA6,#1E90FF); box-shadow:0 2px 16px rgba(0,191,166,0.10);">
+                        <i class="bi bi-gift-fill" style="font-size:2.2rem;"></i>
+                    </div>
+                    <h3 class="fw-semibold mb-2" style="color:#00BFA6;">Donate</h3>
+                    <p class="mb-3" style="color:#555;">Share resources with those in need.</p>
+                    <a th:href="@{/register}" class="btn btn-success rounded-pill px-4">Start Donating</a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <div class="cta-card h-100 shadow-sm border-0 p-4" style="border-radius:1.5rem;">
+                    <div class="icon mb-3" style="background:linear-gradient(135deg,#1E90FF,#00BFA6); box-shadow:0 2px 16px rgba(30,144,255,0.10);">
+                        <i class="bi bi-people-fill" style="font-size:2.2rem;"></i>
+                    </div>
+                    <h3 class="fw-semibold mb-2" style="color:#1E90FF;">Volunteer</h3>
+                    <p class="mb-3" style="color:#555;">Join our community of helpers.</p>
+                    <a th:href="@{/register}" class="btn btn-primary rounded-pill px-4">Join Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" sec:authorize="!isAuthenticated()" style="background:#fff; font-family:'Poppins','Inter',sans-serif;">
+    <div class="container text-center py-5">
+        <h2 class="mb-4 fw-bold" style="font-size:2rem; color:#1E90FF; text-shadow:0 2px 8px rgba(30,144,255,0.10);">Ready to Make a Difference?</h2>
+        <p class="lead mb-4" style="color:#555; font-size:1.15rem;">Join SARA today and be part of a compassionate community.</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a th:href="@{/register}" class="btn btn-success btn-lg rounded-pill px-4">Register Now</a>
+            <a th:href="@{/login}" class="btn btn-primary btn-lg rounded-pill px-4">Login</a>
+        </div>
+    </div>
+</section>
+
+<th:block th:replace="~{fragments/layout :: footer}"></th:block>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
